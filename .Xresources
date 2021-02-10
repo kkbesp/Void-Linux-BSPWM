@@ -7,7 +7,7 @@ Xft.hintstyle:  hintfull
 
 ! window padding
 st.borderpx: 0
-st.font:           Iosevka Medium:pixelsize=13 , Material Design Icons :pixelsize =13
+st.font:           Iosevka Medium:pixelsize=13 , Material Design Icons:pixelsize =13
 st.opacity: 255
 
 ! Base16 OneDark
