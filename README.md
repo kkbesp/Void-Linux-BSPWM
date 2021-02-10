@@ -2,11 +2,11 @@
 ## **Installing**
 Run these commands in the terminal:
 
-    sudo xbps-install -Sy git
-    git clone https://github.com/kkbesp/dots.git
-    cd dots
-    chmod +x install.sh
-    bash install.sh
+   `sudo xbps-install -Sy git`  
+   `git clone https://github.com/kkbesp/dots.git`  
+   `cd dots`  
+   `chmod +x install.sh`  
+   `bash install.sh`  
 
 **Note**.
 1. When you see this image, press `n`  
