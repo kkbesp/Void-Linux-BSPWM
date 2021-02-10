@@ -1,0 +1,9 @@
+#!/bin/bash
+
+update=$(xbps-install  -un | cut -d' ' -f2 | sort | uniq -c | xargs)
+
+if [ -z "$update" ]; then
+    echo "No"
+else
+    echo "$update""s"
+fi

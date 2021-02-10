@@ -1,0 +1,55 @@
+#! /bin/sh
+
+bspc monitor -d I II III IV V VI VII VIII IX X
+bspc config border_width	0
+
+SPACES=$(bspc query -D)
+for SPACE in $SPACES
+do
+  bspc config -d ${SPACE} window_gap		0
+  bspc config -d ${SPACE} top_padding		0
+  bspc config -d ${SPACE} bottom_padding	0
+  bspc config -d ${SPACE} left_padding		0
+  bspc config -d ${SPACE} right_padding		0
+done
+
+bspc config automatic_scheme      spiral
+bspc config split_ratio           0.5
+bspc config borderless_monocle    true
+bspc config gapless_monocle       false
+bspc config single_monocle        true
+bspc config focus_follows_pointer true
+
+bspc rule -a Gnome-calculator state=floating
+bspc rule -a Galculator state=floating
+bspc rule -a Gpick state=floating
+bspc rule -a GParted state=floating
+bspc rule -a File-roller state=floating
+bspc rule -a Nitrogen state=floating
+bspc rule -a Lxappearance state=floating center=true
+bspc rule -a Lxrandr state=floating
+bspc rule -a Pavucontrol state=floating
+bspc rule -a Timeshift-gtk state=floating
+bspc rule -a qt5ct state=floating rectangle=700x470+0+0 center=on
+bspc rule -a SimpleScreenRecorder state=floating
+bspc rule -a Sxiv state=floating
+bspc rule -a Viewnior state=floating
+bspc rule -a SMPlayer state=floating
+bspc rule -a mpv state=floating sticky=on rectangle=300x180+1060+475
+
+bscp rule -a polybar manage=off
+bspc rule -a Tint2 border=off manage=off layer=above state=floating
+bspc rule -a '*:Kunst' sticky=on layer=below border=off focus=off
+
+FLOATING_DESKTOP_ID_5=$(bspc query -D -d '^5')
+bspc subscribe node | while read -a msg ; do
+  desk_id=${msg[2]}
+  wid=${msg[3]}
+  [ "$FLOATING_DESKTOP_ID_5" = "$desk_id" ] && bspc node "$wid" -t floating
+done
+
+sxhkd -c $HOME/.config/sxhkd/sxhkdrc &
+picom -b --config ~/.config/picom/picom.conf &
+dunst &
+flameshot &
+numlockx &

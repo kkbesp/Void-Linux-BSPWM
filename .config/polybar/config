@@ -1,0 +1,177 @@
+[colors]
+background = #282e33
+foreground = #ffffff
+accent = #798BC7
+text = #9baec8
+light = #d5d6d7
+suffix = #ff0404
+
+[settings]
+screenchange-reload = true
+
+[global/wm]
+margin-top = 0
+margin-bottom = 0
+
+[bar/top]
+monitor = ${env:MONITOR:monitor-fallback}
+monitor-fallback = VGA-1
+width = 100%
+height = 16
+offset-x = 0
+offset-y = 0
+fixed-center = true
+bottom = false
+locale = ru_RU.UTF-8
+background = ${colors.background}
+foreground = ${colors.text}
+line-size = 1
+line-color = #f00
+border-size = 0
+border-color = #00000000
+padding-left = 0
+padding-right = 0
+module-margin-left = 3
+module-margin-right = 0
+
+font-0 = "Clear Sans:style=Bold:size=8.5:antialias=true;2"
+font-1 = "Font Awesome 5 Free:style=Solid:pixelsize=8.2;2"
+font-2 = Weather Icons:size=7;2
+font-3 = "Font Awesome 5 Brands:pixelsize=8;2"
+font-4 = "Clear Sans:style=Bold:pixelsize=8:antialias=true;2"
+font-5 = "Font Awesome 5 Free:style=Solid:pixelsize=8;2"
+
+modules-left = app cpu memory title
+modules-center = bspwm
+modules-right = updates openweathermap-forecast fs xkeyboard date power
+cursor-click = pointer
+cursor-scroll = ns-resize
+override-redirect = false
+enable-ipc = true
+wm-restack = bspwm
+
+[module/app]
+type = custom/text
+content = 
+content-foreground = ${colors.accent}
+content-background = #343B41
+content-padding = 3
+click-left = rofi -modi run,drun -show drun -location 1 -xoffset 15 -yoffset 39 -line-padding 4 -columns 1 -width 25 -lines 10 -padding 15 -hide-scrollbar -show-icons -drun-icon-theme
+
+[module/cpu]
+type = internal/cpu
+interval = 2
+format-prefix = "  "
+format-prefix-foreground = ${colors.accent}
+label = %percentage%
+
+[module/memory]
+type = internal/memory
+interval = 2
+format-prefix = "  "
+format-prefix-foreground = ${colors.accent}
+label = %percentage_used%
+
+[module/updates]
+type = custom/script
+exec = doas xbps-install -S > /dev/null 2>&1; ~/.config/polybar/scripts/xbps-updates
+format = <label>
+format-prefix = 
+format-prefix-foreground = ${colors.accent}
+interval = 300 
+label = %output%
+label-padding = 1
+label-font = 1
+format-foreground = ${colors.text}
+
+[module/openweathermap-forecast]
+type = custom/script
+format-prefix = " "
+format-prefix-foreground = ${colors.accent}
+label-foreground = ${colors.text}
+exec = ~/.config/polybar/scripts/openweathermap-forecast.sh
+interval = 600
+label-font = 1
+
+[module/title]
+type = internal/xwindow
+format-padding = 1
+label = "%title:0:30:...%"
+label-maxlen = 30
+
+[module/bspwm]
+type = internal/bspwm
+ws-icon-0 = I;1
+ws-icon-1 = II;2
+ws-icon-2 = III;3
+ws-icon-3 = IV;4
+ws-icon-4 = V;5
+ws-icon-5 = VI;6
+ws-icon-6 = VII;7
+ws-icon-7 = VIII;8
+ws-icon-8 = IX;9
+ws-icon-9 = X;10
+ws-icon-default = 
+format = <label-state> <label-mode>
+label-focused = %icon%
+label-focused-background = #343B41
+label-focused-foreground = ${colors.accent}
+label-focused-padding = 3
+label-occupied = %icon%
+label-occupied-foreground = ${colors.text}
+label-occupied-padding = 3
+label-urgent = %icon%
+index-sort = true
+wrapping-scroll = false
+label-urgent-foreground = ${xrdb:color5}
+label-urgent-padding = 3
+label-empty = 
+label-empty-foreground = ${colors.text}
+label-empty-padding = 3
+
+[module/fs]
+type = internal/fs
+mount-0 = /
+interval = 10
+fixed-values = true
+spacing = 1
+format-mounted = <label-mounted>
+format-mounted-prefix = 
+format-mounted-padding = 1
+format-mounted-prefix-foreground = ${colors.accent}
+format-unmounted = <label-unmounted>
+format-unmounted-prefix = 
+format-unmounted-padding = 1
+format-unmounted-prefix-foreground = ${colors.suffix}
+label-mounted = " %free%"
+label-unmounted = %mountpoint%: not mounted
+label-unmounted-foreground = ${colors.text}
+
+[module/date]
+type = internal/date
+interval = 1
+date-alt = "%e %B %Y,"
+time = "%H:%M"
+time-alt = "%H:%M:%S"
+format-prefix = " "
+format-prefix-foreground = ${colors.accent}
+label =%{A3:gsimplecal & disown:}%date% %time%%{A} %{A}
+label-foreground = ${colors.text}
+format-padding = 0
+
+[module/xkeyboard]
+type = internal/xkeyboard
+blacklist-0 = num lock
+blacklist-1 = caps lock
+format-prefix = " "
+format-prefix-foreground = ${colors.accent}
+label = %layout%
+format-padding = 0
+
+[module/power]
+type = custom/text
+content = 
+content-foreground = ${colors.accent}
+content-background = #343B41
+content-padding = 3
+click-left = sudo poweroff
