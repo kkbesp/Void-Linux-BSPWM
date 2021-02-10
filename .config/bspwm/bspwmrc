@@ -48,7 +48,7 @@ bspc subscribe node | while read -a msg ; do
   [ "$FLOATING_DESKTOP_ID_5" = "$desk_id" ] && bspc node "$wid" -t floating
 done
 
-sxhkd -c $HOME/.config/sxhkd/sxhkdrc &
+pgrep -x sxhkd > /dev/null || sxhkd -c $HOME/.config/sxhkd/sxhkdrc &
 picom -b --config ~/.config/picom/picom.conf &
 dunst &
 flameshot &
