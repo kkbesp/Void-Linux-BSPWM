@@ -1,6 +1,6 @@
 #!/bin/bash
 sudo xbps-install -Suy &&
-sudo xbps-install -Sy xorg base-devel git curl wget libXft-devel libX11-devel harfbuzz-devel libXext-devel libXrender-devel libXinerama-devel bspwm sxhkd dunst flameshot htop neovim polybar python jq font-weather-icons font-awesome5 noto-fonts-cjk noto-fonts-emoji picom numlockx hsetroot firefox chrony lxappearance rofi gtk-engine-murrine gtk2-engines &&
+sudo xbps-install -Sy xorg base-devel git curl wget libXft-devel libX11-devel harfbuzz-devel libXext-devel libXrender-devel libXinerama-devel bspwm sxhkd dunst flameshot htop neovim polybar python jq font-weather-icons font-awesome5 noto-fonts-cjk noto-fonts-emoji picom numlockx hsetroot firefox chrony lxappearance rofi gtk-engine-murrine gtk2-engines font-iosevka &&
 sudo ln -s /etc/sv/chronyd /var/service/ &&
 sudo cp .alias_zsh ~/ &&
 sudo cp .zshrc ~/ &&
@@ -27,6 +27,9 @@ cd .. &&
 sudo chmod +x ~/.config/polybar/scripts/* &&
 cd ctlos-qogir &&
 sudo bash install.sh &&
+cd .. &&
+cd Qogir-icon-theme &&
+bash install.sh &&
 cd .. &&
 sudo xbps-remove -Oo &&
 sudo cd .. &&
