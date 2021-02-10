@@ -1,4 +1,4 @@
-export ZSH="/home/kki/.oh-my-zsh"
+export ZSH="~/.oh-my-zsh"
 ZSH_THEME="kardan"
 plugins=(zsh-autocomplete fast-syntax-highlighting)
 source $ZSH/oh-my-zsh.sh
