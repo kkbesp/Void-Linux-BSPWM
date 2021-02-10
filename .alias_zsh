@@ -1,5 +1,4 @@
 #!/usr/bin/zsh
-
 alias xbi="sudo xbps-install -S"
 alias xbu="sudo xbps-install -Su"
 alias xbr="sudo xbps-remove"
