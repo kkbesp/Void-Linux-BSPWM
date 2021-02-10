@@ -7,7 +7,7 @@
 My personal configuration files and installation script for void linux glibc + bspwm. Collected them myself from different parts of the Internet. I would like to thank ctlos and alex personally, I got inspiration from him and decided to transfer it to void
 
 
-For contact and suggestions for improvement |  
+For contact and suggestions for improvement /
 Для связи и предложений по улучшения - https://t.me/kkbesp
 
 
@@ -28,7 +28,7 @@ Run these commands in the terminal:
 
    `bash install.sh`  
 
-**Note**.
+**Note**
 1. When you see this image, press `n`  
 *The script is running and changing the shell will require you to run it again!*
 ![enter image description here](https://i.imgur.com/ow2BU9x.png)  
