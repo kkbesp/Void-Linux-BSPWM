@@ -9,7 +9,7 @@ Run these commands in the terminal:
     bash install.sh
 
 **Note**.
-1. When you see this image, press `n`
+1. When you see this image, press `n`  
 *The script is running and changing the shell will require you to run it again!*
 ![enter image description here](https://i.imgur.com/ow2BU9x.png)
 2. After executing the script you should
@@ -26,7 +26,7 @@ Run these commands in the terminal:
     bash install.sh
 
 **Примечание**
-1. При виде данного изображения нажать `n`
+1. При виде данного изображения нажать `n`  
 *Скрипт запущен и смена шелла потребует повторного его запуска!*
 ![enter image description here](https://i.imgur.com/ow2BU9x.png)
 2. После выполнения скрипта выполнить перезагрузку `sudo reboot`
