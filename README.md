@@ -29,7 +29,9 @@ Run these commands in the terminal:
 `sudo reboot`
 
 **Key combinations**
-***Run programs***
+
+
+***Run programs***  
 Configuration file - ~/.config/sxhkd/sxhkdrc
 
 Open terminal (st)  
@@ -53,7 +55,8 @@ Capture a screenshot of the highlighted area
 Take a screenshot after 5 seconds  
 `super` + `alt` + `print`
 
-***Management of bspwm***
+
+***Management of bspwm***  
 The configuration file is ~/.config/sxhkd/sxhkdrc
 
 Hide/show polybar  
@@ -102,6 +105,7 @@ Change window size
 Moving the floating window  
 `super` + `left mouse button`  
 
+
 ## **Установка**
 Выполните эти команды в терминале:
 
@@ -130,7 +134,9 @@ Moving the floating window
 
 
 **Комбинации клавиш**
-***Запуск программ***
+
+
+***Запуск программ***  
 Конфигурационный файл - ~/.config/sxhkd/sxhkdrc
 
 Открыть терминал (st)  
@@ -154,7 +160,8 @@ Moving the floating window
 Сделать скришот спустя 5 секунд  
 `super` + `alt` + `print`
 
-***Управление bspwm***
+
+***Управление bspwm***  
 Конфигурационный файл - ~/.config/sxhkd/sxhkdrc
 
 Скрыть/показать polybar  
