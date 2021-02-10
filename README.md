@@ -34,10 +34,10 @@ Open telegram
 Take a screenshot of the entire screen  
 `print`
 
-Capture a screenshot of the highlighted area
+Capture a screenshot of the highlighted area  
 `uper` + `print`
 
-Take a screenshot after 5 seconds
+Take a screenshot after 5 seconds  
 `super` + `alt` + `print`
 
 ***Management of bspwm***
@@ -124,10 +124,10 @@ Moving the floating window
 Сделать скриншот всего экрана  
 `print`
 
-Сделать скриншот выделенной области
+Сделать скриншот выделенной области  
 `super` + `print`
 
-Сделать скришот спустя 5 секунд
+Сделать скришот спустя 5 секунд  
 `super` + `alt` + `print`
 
 ***Управление bspwm***
