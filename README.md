@@ -23,9 +23,6 @@ Run these commands in the terminal:
    `cd dots`   
 
 
-   `chmod +x install.sh`  
-
-
    `bash install.sh`  
 
 **Note**
@@ -124,9 +121,6 @@ Moving the floating window
 
 
    `cd dots`  
-
-
-   `chmod +x install.sh`  
 
 
    `bash install.sh`  
