@@ -24,6 +24,7 @@ cd st &&
 make &&
 sudo make install &&
 cd .. &&
+sudo chmod +x ~/.config/polybar/scripts/*
 sudo xbps-remove -Oo &&
 sudo cd .. &&
 sudo rm -rf dots &&
