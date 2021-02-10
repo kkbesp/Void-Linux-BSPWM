@@ -1,4 +1,8 @@
 # Void Linux base glibc
+For contact and suggestions for improvement /   
+Для связи и предложений по улучшения - https://t.me/kkbesp
+
+
 ## **Installing**
 Run these commands in the terminal:
 
