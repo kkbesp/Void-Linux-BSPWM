@@ -54,7 +54,7 @@ wm-restack = bspwm
 type = custom/text
 content = 
 content-foreground = ${colors.accent}
-content-background = #343B41
+content-background = #3d444b
 content-padding = 3
 click-left = rofi -modi run,drun -show drun -location 1 -xoffset 15 -yoffset 39 -line-padding 4 -columns 1 -width 25 -lines 10 -padding 15 -hide-scrollbar -show-icons -drun-icon-theme
 
@@ -95,9 +95,9 @@ label-font = 1
 
 [module/title]
 type = internal/xwindow
-format-padding = 1
-label = "%title:0:30:...%"
-label-maxlen = 30
+format-padding = 0
+label = "%title:0:35:...%"
+label-maxlen = 35
 
 [module/bspwm]
 type = internal/bspwm
@@ -114,7 +114,7 @@ ws-icon-9 = X;10
 ws-icon-default = 
 format = <label-state> <label-mode>
 label-focused = %icon%
-label-focused-background = #343B41
+label-focused-background = #3d444b
 label-focused-foreground = ${colors.accent}
 label-focused-padding = 3
 label-occupied = %icon%
@@ -172,6 +172,6 @@ format-padding = 0
 type = custom/text
 content = 
 content-foreground = ${colors.accent}
-content-background = #343B41
+content-background = #3d444b
 content-padding = 3
 click-left = sudo poweroff
