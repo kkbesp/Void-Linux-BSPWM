@@ -3,9 +3,17 @@
 Run these commands in the terminal:
 
    `sudo xbps-install -Sy git`  
+
+
    `git clone https://github.com/kkbesp/dots.git`  
-   `cd dots`  
+
+
+   `cd dots`   
+
+
    `chmod +x install.sh`  
+
+
    `bash install.sh`  
 
 **Note**.
@@ -21,7 +29,7 @@ Run these commands in the terminal:
 Configuration file - ~/.config/sxhkd/sxhkdrc
 
 Open terminal (st)  
-`super` + `enter`.
+`super` + `enter`
 
 Open program launcher manager (rofi)  
 `alt` + `d`
@@ -84,20 +92,30 @@ Change the desktop
 `super` + `digit`
 
 Change window size  
-`super` + `right mouse button    
+`super` + `right mouse button`  
 `super` + `alt` + `h,j,k,l`  
 
 Moving the floating window  
-`super` + `left mouse button`
+`super` + `left mouse button`  
 
 ## **Установка**
 Выполните эти команды в терминале:
 
   `sudo xbps-install -Sy git`  
+
+
   `git clone https://github.com/kkbesp/dots.git`  
+
+
    `cd dots`  
+
+
    `chmod +x install.sh`  
+
+
    `bash install.sh`  
+
+
 
 **Примечание**
 1. При виде данного изображения нажать `n`  
