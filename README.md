@@ -45,16 +45,19 @@ Run these commands in the terminal:
 
 
 **Aliases**  
-`xbi` = sudo xbps-install -S
+Configuration file - ~/.alias_zsh
 
 
-`xbu` = sudo xbps-install -Su  
+`xbi` = `sudo xbps-install -S`   *Installing the package*
 
 
-`xbr` = sudo xbps-remove  
+`xbu` = `sudo xbps-install -Su`   *System update*
 
 
-`xbo` = sudo xbps-remove -Oo  
+`xbr` = `sudo xbps-remove`   *Removing a package*
+
+
+`xbo` = `sudo xbps-remove -Oo`   *Removing orphans and package cache* 
 
 
 **Key combinations**
@@ -159,17 +162,20 @@ Moving the floating window
 3. После выполнения скрипта выполнить перезагрузку `sudo reboot`  
 
 
-**Алиасы**  
-`xbi` = sudo xbps-install -S  *Установка пакета*  
+***Алиасы***  
+Конфигурационный файл - ~/.alias_zsh
 
 
-`xbu` = sudo xbps-install -Su  *Обновление системы*
+`xbi` = `sudo xbps-install -S`   *Установка пакета*  
 
 
-`xbr` = sudo xbps-remove  *Удаление пакета*
+`xbu` = `sudo xbps-install -Su`   *Обновление системы*
 
 
-`xbo` = sudo xbps-remove -Oo  *Удаление сирот и кэша пакетов*
+`xbr` = `sudo xbps-remove`   *Удаление пакета*
+
+
+`xbo` = `sudo xbps-remove -Oo`   *Удаление сирот и кэша пакетов*
 
 
 **Комбинации клавиш**
@@ -177,6 +183,7 @@ Moving the floating window
 
 ***Запуск программ***  
 Конфигурационный файл - ~/.config/sxhkd/sxhkdrc
+
 
 Открыть терминал (st)  
 `super` + `enter`
