@@ -1,14 +1,24 @@
 # Void Linux | base, glibc
 
-**Описание | Description**  
+**Description | Описание**  
 Мои личные конфигурационные файлы и установочный скрипт для void linux glibc + bspwm. Собирал сам с разных уголков интернета. Хочу выразить благодарность ctlos и Алексу лично, у него черпал вдохновение и решил перенести на void.
 
 
 My personal configuration files and installation script for void linux glibc + bspwm. Collected them myself from different parts of the Internet. I would like to thank ctlos and alex personally, I got inspiration from him and decided to transfer it to void
 
 
-For contact and suggestions for improvement /
-Для связи и предложений по улучшения - https://t.me/kkbesp
+For contact and suggestions for improvement / Для связи и предложений по улучшения - https://t.me/kkbesp
+
+## **Desktop screenshots | Скриншоты рабочего стола**
+
+
+![screen](https://i.imgur.com/yCdftZy.png)
+
+
+![screen1](https://i.imgur.com/NbGDRJj.png)
+
+
+![screen2](https://i.imgur.com/higfsuQ.png)
 
 
 ## **Installing**
@@ -28,7 +38,7 @@ Run these commands in the terminal:
 **Note**
 1. When you see this image, press `n`  
 *The script is running and changing the shell will require you to run it again!*
-![enter image description here](https://i.imgur.com/ow2BU9x.png)  
+![oh-my-zsh](https://i.imgur.com/ow2BU9x.png)  
 2. Telegram theme installation link - https://t.me/addtheme/kkbesp
 3. After executing the script you should
 `sudo reboot`
@@ -130,7 +140,7 @@ Moving the floating window
 **Примечание**
 1. При виде данного изображения нажать `n`  
 *Скрипт запущен и смена шелла потребует повторного его запуска!*
-![enter image description here](https://i.imgur.com/ow2BU9x.png)  
+![oh-my-zsh](https://i.imgur.com/ow2BU9x.png)  
 2. Ссылка для установки telegram темы - https://t.me/addtheme/kkbesp
 3. После выполнения скрипта выполнить перезагрузку `sudo reboot`  
 
