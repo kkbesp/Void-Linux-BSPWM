@@ -2,11 +2,11 @@ configuration {
   theme: "default.rasi";
   show-icons: true;
   icon-theme: "Qogir";
-  font: "Clear Sans Bold 9";
+  font: "Clear Sans 9";
   terminal: "st";
   modi: "drun,run,window";
-  width: 25;
-  lines: 7;
+  width: 40;
+  lines: 8;
   columns: 1;
   bw: 7;
   location: 0;

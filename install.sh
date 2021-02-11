@@ -12,6 +12,7 @@ sudo cp -r .icons/* ~/.icons/ &&
 sudo mkdir -p /.fonts/
 sudo cp -r .fonts/* ~/.fonts/ &&
 sudo cp .Xresources ~/
+sudo cp -r .config/rofi ~/.config/
 sudo xbps-install -Sy zsh &&
 sudo sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" &&
 sudo cp -r zsh-autocomplete ~/.oh-my-zsh/plugins/ &&
