@@ -43,6 +43,14 @@ Run these commands in the terminal:
 3. After executing the script you should
 `sudo reboot`
 
+
+**Aliases**  
+xbi = sudo xbps-install -S  
+xbu = sudo xbps-install -Su
+xbr = sudo xbps-remove
+xbo = sudo xbps-remove -Oo
+
+
 **Key combinations**
 
 
@@ -143,6 +151,13 @@ Moving the floating window
 ![oh-my-zsh](https://i.imgur.com/ow2BU9x.png)  
 2. Ссылка для установки telegram темы - https://t.me/addtheme/kkbesp
 3. После выполнения скрипта выполнить перезагрузку `sudo reboot`  
+
+
+**Алиасы**  
+xbi = sudo xbps-install -S  
+xbu = sudo xbps-install -Su
+xbr = sudo xbps-remove
+xbo = sudo xbps-remove -Oo
 
 
 **Комбинации клавиш**
