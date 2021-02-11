@@ -2,7 +2,7 @@ configuration {
   theme: "default.rasi";
   show-icons: true;
   icon-theme: "Qogir";
-  font: "Clear Sans 9";
+  font: "Clear Sans Bold 9.3";
   terminal: "st";
   modi: "drun,run,window";
   width: 40;
