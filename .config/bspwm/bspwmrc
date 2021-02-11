@@ -49,7 +49,7 @@ bspc subscribe node | while read -a msg ; do
 done
 
 pgrep -x sxhkd > /dev/null || sxhkd -c $HOME/.config/sxhkd/sxhkdrc &
-picom &
 dunst &
 flameshot &
 numlockx &
+picom &
