@@ -65,7 +65,7 @@ Take a screenshot of the entire screen
 `print`
 
 Capture a screenshot of the highlighted area  
-`uper` + `print`
+`super` + `print`
 
 Take a screenshot after 5 seconds  
 `super` + `alt` + `print`
