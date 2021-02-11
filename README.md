@@ -45,10 +45,16 @@ Run these commands in the terminal:
 
 
 **Aliases**  
-xbi = sudo xbps-install -S  
-xbu = sudo xbps-install -Su
-xbr = sudo xbps-remove
-xbo = sudo xbps-remove -Oo
+`xbi` = sudo xbps-install -S
+
+
+`xbu` = sudo xbps-install -Su  
+
+
+`xbr` = sudo xbps-remove  
+
+
+`xbo` = sudo xbps-remove -Oo  
 
 
 **Key combinations**
@@ -154,10 +160,16 @@ Moving the floating window
 
 
 **Алиасы**  
-xbi = sudo xbps-install -S  
-xbu = sudo xbps-install -Su
-xbr = sudo xbps-remove
-xbo = sudo xbps-remove -Oo
+`xbi` = sudo xbps-install -S  *Установка пакета*  
+
+
+`xbu` = sudo xbps-install -Su  *Обновление системы*
+
+
+`xbr` = sudo xbps-remove  *Удаление пакета*
+
+
+`xbo` = sudo xbps-remove -Oo  *Удаление сирот и кэша пакетов*
 
 
 **Комбинации клавиш**
