@@ -12,13 +12,13 @@ For contact and suggestions for improvement / Для связи и предло�
 ## **Desktop screenshots | Скриншоты рабочего стола**
 
 
-![screen](https://i.imgur.com/yCdftZy.png)
+![screen](https://i.imgur.com/9W0LMUE.png)
 
 
-![screen1](https://i.imgur.com/NbGDRJj.png)
+![screen1](https://i.imgur.com/I0Nc1rg.png)
 
 
-![screen2](https://i.imgur.com/higfsuQ.png)
+![screen2](https://i.imgur.com/1UybSqQ.png)
 
 
 ## **Installing**
@@ -42,7 +42,7 @@ Run these commands in the terminal:
 
 
 **Aliases**  
-Configuration file - ~/.alias_zsh
+Configuration file - ~/.zshrc
 
 
 `xbi` = `sudo xbps-install -S`   *Installing the package*
@@ -157,7 +157,7 @@ Moving the floating window
 
 
 **Алиасы**  
-Конфигурационный файл - ~/.alias_zsh
+Конфигурационный файл - ~/.zshrc
 
 
 `xbi` = `sudo xbps-install -S`   *Установка пакета*  
