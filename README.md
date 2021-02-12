@@ -1,14 +1,5 @@
 # Void Linux | base glibc
 
-**Description | Описание**  
-Мои личные конфигурационные файлы и установочный скрипт для void linux glibc + bspwm. Собирал сам с разных уголков интернета. Хочу выразить благодарность ctlos и Алексу лично, у него черпал вдохновение и решил перенести на void.
-
-
-My personal configuration files and installation script for void linux glibc + bspwm. Collected them myself from different parts of the Internet. I would like to thank ctlos and alex personally, I got inspiration from him and decided to transfer it to void
-
-
-For contact and suggestions for improvement / Для связи и предложений по улучшения - https://t.me/kkbesp
-
 ## **Desktop screenshots | Скриншоты рабочего стола**
 
 
