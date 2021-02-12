@@ -33,5 +33,4 @@ cd .. &&
 sudo xbps-remove -Oo &&
 cd .. &&
 rm -rf dots &&
-zinit update &&
 chsh -s /bin/zsh
