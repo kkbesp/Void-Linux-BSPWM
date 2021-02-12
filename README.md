@@ -6,7 +6,7 @@
 ![screen](https://i.imgur.com/FDtPuwL.png)
 
 
-![screen1](https://i.imgur.com/AsRMdSX.png()
+![screen1](https://i.imgur.com/AsRMdSX.png)
 
 
 ![screen2](https://i.imgur.com/qAK58Gv.png)
