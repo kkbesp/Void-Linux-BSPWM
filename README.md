@@ -36,11 +36,8 @@ Run these commands in the terminal:
    `bash install.sh`  
 
 **Note**
-1. When you see this image, press `n`  
-*The script is running and changing the shell will require you to run it again!*
-![oh-my-zsh](https://i.imgur.com/ow2BU9x.png)  
-2. Telegram theme installation link - https://t.me/addtheme/kkbesp
-3. After executing the script you should
+1. Telegram theme installation link - https://t.me/addtheme/kkbesp
+2. After executing the script you should
 `sudo reboot`
 
 
@@ -155,11 +152,8 @@ Moving the floating window
 
 
 **Примечание**
-1. При виде данного изображения нажать `n`  
-*Скрипт запущен и смена шелла потребует повторного его запуска!*
-![oh-my-zsh](https://i.imgur.com/ow2BU9x.png)  
-2. Ссылка для установки telegram темы - https://t.me/addtheme/kkbesp
-3. После выполнения скрипта выполнить перезагрузку `sudo reboot`  
+1. Ссылка для установки telegram темы - https://t.me/addtheme/kkbesp
+2. После выполнения скрипта выполнить перезагрузку `sudo reboot`  
 
 
 **Алиасы**  
