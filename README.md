@@ -3,13 +3,13 @@
 ## **Desktop screenshots | Скриншоты рабочего стола**
 
 
-![screen](https://i.imgur.com/9W0LMUE.png)
+![screen](https://i.imgur.com/FDtPuwL.png)
 
 
-![screen1](https://i.imgur.com/I0Nc1rg.png)
+![screen1](https://i.imgur.com/AsRMdSX.png()
 
 
-![screen2](https://i.imgur.com/1UybSqQ.png)
+![screen2](https://i.imgur.com/qAK58Gv.png)
 
 
 ## **Installing**
