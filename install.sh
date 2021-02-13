@@ -11,6 +11,7 @@ cp -r .icons/* ~/.icons/ &&
 mkdir -p /.fonts/
 cp -r .fonts/* ~/.fonts/ &&
 cp .Xresources ~/
+cp .p10k.zsh ~/
 cp -r .config/rofi ~/.config/
 sudo xbps-install -Sy zsh &&
 mkdir ~/.zinit
