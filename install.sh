@@ -15,13 +15,13 @@ cp -r zsh-autocomplete ~/.zinit/plugins/ &&
 sudo ln -s /usr/share/fontconfig/conf.avail/70-no-bitmaps.conf /etc/fonts/conf.d/ &&
 sudo xbps-reconfigure -f fontconfig &&
 sudo fc-cache -f -v &&
-cd ~/dots/st &&
+cd ~/dots/terminal &&
 make &&
 sudo make install &&
 chmod +x ~/.config/polybar/scripts/* &&
-cd ~/dots/ctlos-qogir &&
+cd ~/dots/icon-theme &&
 bash install.sh &&
-cd ~/dots/Qogir-icon-theme &&
+cd ~/dots/theme &&
 bash install.sh &&
 cd ~ &&
 sudo xbps-remove -Oo &&
