@@ -12,6 +12,7 @@ cp -r .fonts/ ~ &&
 mkdir ~/.zinit &&
 git clone https://github.com/zdharma/zinit.git ~/.zinit/bin &&
 cp -r zsh-autocomplete ~/.zinit/plugins/ &&
+sudo ln -s /usr/share/fontconfig/conf.avail/70-no-bitmaps.conf /etc/fonts/conf.d/ &&
 sudo xbps-reconfigure -f fontconfig &&
 sudo fc-cache -f -v &&
 cd ~/dots/terminal &&
