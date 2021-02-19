@@ -18,7 +18,7 @@ Run these commands in the terminal:
    `sudo xbps-install -Sy git`  
 
 
-   `git clone https://github.com/kkbesp/dots.git`  
+   `git clone https://github.com/kkbesp/Void-Linux-BSPWM`  
 
 
    `cd dots`   
@@ -132,7 +132,7 @@ Moving the floating window
   `sudo xbps-install -Sy git`  
 
 
-  `git clone https://github.com/kkbesp/dots.git`  
+  `git clone https://github.com/kkbesp/Void-Linux-BSPWM`  
 
 
    `cd dots`  
