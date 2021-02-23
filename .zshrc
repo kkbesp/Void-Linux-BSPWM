@@ -7,7 +7,6 @@ autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
 
-source .zinit/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 zinit ice depth=1; zinit light romkatv/powerlevel10k
 
 zinit wait lucid for \
