@@ -15,15 +15,15 @@ cp -r zsh-autocomplete ~/.zinit/plugins/ &&
 sudo ln -s /usr/share/fontconfig/conf.avail/70-no-bitmaps.conf /etc/fonts/conf.d/ &&
 sudo xbps-reconfigure -f fontconfig &&
 sudo fc-cache -f -v &&
-cd ~/dots/terminal &&
+cd ~/Void-Linux-BSPWM/terminal &&
 make &&
 sudo make install &&
 chmod +x ~/.config/polybar/scripts/* &&
 sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim' &&
-cd ~/dots/icon-theme &&
+cd ~/Void-Linux-BSPWM/icon-theme &&
 bash install.sh &&
-cd ~/dots/theme &&
+cd ~/Void-Linux-BSPWM/theme &&
 bash install.sh &&
 cd ~ &&
 sudo xbps-remove -Oo &&
