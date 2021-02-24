@@ -21,7 +21,7 @@ Run these commands in the terminal:
    `git clone https://github.com/kkbesp/Void-Linux-BSPWM`  
 
 
-   `cd dots`   
+   `cd Void-Linux-BSPWM`   
 
 
    `bash install.sh`  
@@ -135,7 +135,7 @@ Moving the floating window
   `git clone https://github.com/kkbesp/Void-Linux-BSPWM`  
 
 
-   `cd dots`  
+   `cd Void-Linux-BSPWM`  
 
 
    `bash install.sh`  
