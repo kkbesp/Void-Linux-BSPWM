@@ -1,12 +1,12 @@
 configuration {
   theme: "default.rasi";
-  show-icons: true;
+  show-icons: false;
   icon-theme: "Qogir";
-  font: "Clear Sans Bold 9.3";
+  font: "Clear Sans Medium 10";
   terminal: "st";
   modi: "drun,run,window";
   width: 40;
-  lines: 8;
+  lines: 5;
   columns: 1;
   bw: 7;
   location: 0;
@@ -16,8 +16,8 @@ configuration {
   run-command: "{cmd}";
   run-shell-command: "{terminal} -e {cmd}";
   window-command: "wmctrl -i -R {window}";
-  sidebar-mode: true;
-  line-margin: 10;
+  sidebar-mode: false;
+  line-margin: 0;
   separator-style: "none";
   hide-scrollbar: true;
   scrollbar-width: 0;

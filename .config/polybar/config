@@ -1,7 +1,7 @@
 [colors]
-background = #282e33
-foreground = #ffffff
-accent = #798BC7
+background = #1d2026
+foreground = ${xrdb:color7}
+accent = #8C8FD6
 text = #9baec8
 light = #d5d6d7
 suffix = #ff0404
@@ -36,14 +36,13 @@ module-margin-right = 0
 
 font-0 = "Clear Sans:style=Bold:size=8.5:antialias=true;2"
 font-1 = "Font Awesome 5 Free:style=Solid:pixelsize=8.2;2"
-font-2 = Weather Icons:size=7;2
 font-3 = "Font Awesome 5 Brands:pixelsize=8;2"
 font-4 = "Clear Sans:style=Bold:pixelsize=8:antialias=true;2"
 font-5 = "Font Awesome 5 Free:style=Solid:pixelsize=8;2"
 
-modules-left = app cpu memory title
+modules-left = app cpu memory
 modules-center = bspwm
-modules-right = updates openweathermap-forecast fs xkeyboard date power
+modules-right = update openweathermap-forecast fs xkeyboard date power
 cursor-click = pointer
 cursor-scroll = ns-resize
 override-redirect = false
@@ -54,7 +53,7 @@ wm-restack = bspwm
 type = custom/text
 content = 
 content-foreground = ${colors.accent}
-content-background = #3d444b
+content-background = #333440
 content-padding = 3
 click-left = rofi -modi run,drun -show drun -location 1 -xoffset 15 -yoffset 39 -line-padding 4 -columns 1 -width 25 -lines 10 -padding 15 -hide-scrollbar -show-icons -drun-icon-theme
 
@@ -72,18 +71,6 @@ format-prefix = "  "
 format-prefix-foreground = ${colors.accent}
 label = %percentage_used%
 
-[module/updates]
-type = custom/script
-exec = doas xbps-install -S > /dev/null 2>&1; ~/.config/polybar/scripts/xbps-updates
-format = <label>
-format-prefix = 
-format-prefix-foreground = ${colors.accent}
-interval = 300 
-label = %output%
-label-padding = 1
-label-font = 1
-format-foreground = ${colors.text}
-
 [module/openweathermap-forecast]
 type = custom/script
 format-prefix = " "
@@ -96,8 +83,8 @@ label-font = 1
 [module/title]
 type = internal/xwindow
 format-padding = 0
-label = "%title:0:35:...%"
-label-maxlen = 35
+label = "%title:0:25:...%"
+label-maxlen = 25
 
 [module/bspwm]
 type = internal/bspwm
@@ -114,7 +101,7 @@ ws-icon-9 = X;10
 ws-icon-default = 
 format = <label-state> <label-mode>
 label-focused = %icon%
-label-focused-background = #3d444b
+label-focused-background = #333440
 label-focused-foreground = ${colors.accent}
 label-focused-padding = 3
 label-occupied = %icon%
@@ -172,6 +159,21 @@ format-padding = 0
 type = custom/text
 content = 
 content-foreground = ${colors.accent}
-content-background = #3d444b
+content-background = #333440
 content-padding = 3
 click-left = sudo poweroff
+
+[module/updates]
+type = custom/script
+exec = doas xbps-install -S > /dev/null 2>&1; ~/.config/polybar/scripts/xbps-updates
+format = <label>
+format-prefix = 
+format-prefix-foreground = ${colors.accent}
+label = %output%
+label-padding = 1
+label-font = 1
+format-foreground = ${colors.text}
+interval = 60
+label-foreground = ${colors.accent}
+cursor-click = pointer
+click-left = "st -e sudo xbps-install -Su &"

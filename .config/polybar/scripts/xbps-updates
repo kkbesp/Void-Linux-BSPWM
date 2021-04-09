@@ -1,9 +1,13 @@
 #!/bin/bash
 
+if ! updates=$(checkupdates 2> /dev/null | wc -l ); then
+    updates=0
+fi
+
 update=$(xbps-install  -un | cut -d' ' -f2 | sort | uniq -c | xargs)
 
-if [ -z "$update" ]; then
-    echo "0"
+if [ "$updates" -gt 0 ]; then
+    echo " $updates"
 else
-    echo "$update""s"
+    echo ""
 fi

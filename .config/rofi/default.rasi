@@ -1,13 +1,13 @@
 * {
-  background-color: #18191d;
+  background-color: #111419;
   text-color: #e8eaef;
-  selected: #5a74ca;
+  selected: #1d2026;
 }
 
 mainbox {
-  background-color: #18191d;
+  background-color: #111419;
   border: 0;
-  padding: 10px;
+  padding: 5px;
 }
 
 element {
@@ -15,7 +15,7 @@ element {
 }
 
 element-icon {
-  size: 18;
+  size: 20;
 }
 
 element.selected {

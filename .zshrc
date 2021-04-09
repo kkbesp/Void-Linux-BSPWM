@@ -3,20 +3,12 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 source ~/.zinit/bin/zinit.zsh
-autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
-
-zinit ice depth=1; zinit light romkatv/powerlevel10k
-
-zinit wait lucid for \
- atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
-    zdharma/fast-syntax-highlighting \
- blockf \
-    zsh-users/zsh-completions \
- atload"!_zsh_autosuggest_start" \
-    zsh-users/zsh-autosuggestions
-
+zinit for \
+    light-mode  zsh-users/zsh-autosuggestions \
+    		zdharma/fast-syntax-highlighting \
+		romkatv/powerlevel10k \
 
 alias merge="xrdb -merge $HOME/.Xresources"
 alias upgrub="sudo grub-mkconfig -o /boot/grub/grub.cfg"
@@ -25,9 +17,12 @@ alias la="ls -alFh --color=auto"
 alias llp="stat -c '%A %a %n' {*,.*}"
 alias ll="ls -a --color=auto"
 alias l="ls -CF --color=auto"
-alias .l="dirs -v"
 alias lss="ls -sh | sort -h"
-alias mk="mkdir"
+alias c='clear'
+alias h='history'
+alias ping='ping -c 5'
+alias ports='netstat -tulanp'
+alias fastping='ping -c 100 -s.2'
 alias /="cd /"
 alias ~="cd ~"
 alias ..="cd .."
@@ -37,20 +32,20 @@ alias .....="cd ../../../.."
 alias ......='cd ../../../../..'
 alias q="exit"
 
-alias gi="git init"
-alias gs="git status"
-alias gl="git log --stat --pretty=oneline --graph --date=short"
-alias ga="git add --all"
-alias gr="git remote"
-alias gf="git fetch"
-alias gpl="git pull"
-alias gp="git push"
-alias gpm="git push origin master"
-
 alias xbi="sudo xbps-install -S"
 alias xbu="sudo xbps-install -Su"
 alias xbr="sudo xbps-remove"
 alias xbo="sudo xbps-remove -Oo"
 alias dt="cd ~/Documents/dots"
+
+setopt completealiases
+autoload -U compinit && compinit
+setopt HIST_IGNORE_DUPS
+ZSH_CACHE_DIR=$HOME/.cache/zshcache
+export BROWSER="firefox"
+export TERM="st"
+HISTFILE=~/.cache/.zhist
+HISTSIZE=100000
+SAVEHIST=100000
 
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
