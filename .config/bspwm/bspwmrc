@@ -37,7 +37,7 @@ bspc rule -a Viewnior state=floating
 bspc rule -a SMPlayer state=floating
 bspc rule -a mpv state=floating sticky=on rectangle=300x180+1060+475
 
-bscp rule -a polybar manage=off
+bspc rule -a polybar manage=off
 bspc rule -a Tint2 border=off manage=off layer=above state=floating
 bspc rule -a '*:Kunst' sticky=on layer=below border=off focus=off
 
