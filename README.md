@@ -31,6 +31,10 @@ Run these commands in the terminal:
 2. After executing the script you should
 `sudo reboot`
 
+**Updates (Void Linux + bspwm, last 5 years)**
+1. Audio stack: modern Void Linux setups use PipeWire + WirePlumber. This installer now includes `pipewire`, `wireplumber`, `pipewire-pulse`, and `pavucontrol` to replace legacy PulseAudio flows.
+2. User directories and XDG helpers: add `xdg-user-dirs` and `xdg-utils` for better desktop integration (file managers, default apps, screenshots, etc.).
+
 
 **Aliases**  
 Configuration file - ~/.zshrc
@@ -145,6 +149,10 @@ Moving the floating window
 **Примечание**
 1. Ссылка для установки telegram темы - https://t.me/addtheme/kkbesp
 2. После выполнения скрипта выполнить перезагрузку `sudo reboot`  
+
+**Обновления (Void Linux + bspwm за последние 5 лет)**
+1. Аудио-стек: в современном Void Linux обычно используют PipeWire + WirePlumber. В установщик добавлены `pipewire`, `wireplumber`, `pipewire-pulse` и `pavucontrol` вместо старого PulseAudio.
+2. Пользовательские каталоги и XDG-утилиты: добавлены `xdg-user-dirs` и `xdg-utils` для лучшей интеграции с окружением.
 
 
 **Алиасы**  
