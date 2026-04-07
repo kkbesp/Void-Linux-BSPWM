@@ -2,13 +2,15 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-source ~/.zinit/bin/zinit.zsh
-(( ${+_comps} )) && _comps[zinit]=_zinit
+# Zinit (modern path)
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+[ ! -d "$ZINIT_HOME" ] && mkdir -p "$(dirname $ZINIT_HOME)" && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+source "${ZINIT_HOME}/zinit.zsh"
 
 zinit for \
     light-mode  zsh-users/zsh-autosuggestions \
-    		zdharma/fast-syntax-highlighting \
-		romkatv/powerlevel10k \
+                zdharma-continuum/fast-syntax-highlighting \
+                romkatv/powerlevel10k
 
 alias merge="xrdb -merge $HOME/.Xresources"
 alias upgrub="sudo grub-mkconfig -o /boot/grub/grub.cfg"
@@ -43,7 +45,7 @@ autoload -U compinit && compinit
 setopt HIST_IGNORE_DUPS
 ZSH_CACHE_DIR=$HOME/.cache/zshcache
 export BROWSER="firefox"
-export TERM="st"
+export TERM="st-256color"
 HISTFILE=~/.cache/.zhist
 HISTSIZE=100000
 SAVEHIST=100000
