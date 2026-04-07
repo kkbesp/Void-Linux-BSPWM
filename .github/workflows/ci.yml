@@ -31,10 +31,11 @@ jobs:
           for f in \
             install.sh \
             .config/polybar/launch.sh \
-            .config/polybar/scripts/xbps-updates; do
+            .config/polybar/scripts/xbps-updates \
+            .config/bspwm/bspwmrc; do
             if [ -f "$f" ]; then
               echo "::group::ShellCheck (bash) $f"
-              shellcheck -s bash -S warning -f gcc "$f" || FAILED=1
+              shellcheck -s bash -S error -f gcc "$f" || FAILED=1
               echo "::endgroup::"
             fi
           done
@@ -47,13 +48,12 @@ jobs:
           for f in \
             .config/polybar/scripts/openweathermap-forecast.sh \
             .config/polybar/scripts/power-menu.sh \
-            .config/bspwm/bspwmrc \
             .xinitrc \
             terminal/st-copyout \
             terminal/st-urlhandler; do
             if [ -f "$f" ]; then
               echo "::group::ShellCheck (sh) $f"
-              shellcheck -s sh -S warning -f gcc "$f" || FAILED=1
+              shellcheck -s sh -S error -f gcc "$f" || FAILED=1
               echo "::endgroup::"
             fi
           done
