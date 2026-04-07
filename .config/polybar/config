@@ -14,7 +14,7 @@ margin-top = 0
 margin-bottom = 0
 
 [bar/top]
-monitor = ${env:MONITOR:monitor-fallback}
+monitor = ${env:MONITOR:}
 monitor-fallback = VGA-1
 width = 100%
 height = 16
@@ -31,14 +31,12 @@ border-size = 0
 border-color = #00000000
 padding-left = 0
 padding-right = 0
-module-margin-left = 3
-module-margin-right = 0
+module-margin = 3
 
 font-0 = "Clear Sans:style=Bold:size=8.5:antialias=true;2"
-font-1 = "Font Awesome 5 Free:style=Solid:pixelsize=8.2;2"
-font-3 = "Font Awesome 5 Brands:pixelsize=8;2"
-font-4 = "Clear Sans:style=Bold:pixelsize=8:antialias=true;2"
-font-5 = "Font Awesome 5 Free:style=Solid:pixelsize=8;2"
+font-1 = "Font Awesome 6 Free:style=Solid:pixelsize=8.2;2"
+font-2 = "Font Awesome 6 Brands:pixelsize=8;2"
+font-3 = "Clear Sans:style=Bold:pixelsize=8:antialias=true;2"
 
 modules-left = app cpu memory
 modules-center = bspwm
@@ -51,29 +49,29 @@ wm-restack = bspwm
 
 [module/app]
 type = custom/text
-content = 
-content-foreground = ${colors.accent}
-content-background = #333440
-content-padding = 3
-click-left = rofi -modi run,drun -show drun -location 1 -xoffset 15 -yoffset 39 -line-padding 4 -columns 1 -width 25 -lines 10 -padding 15 -hide-scrollbar -show-icons -drun-icon-theme
+label =
+label-foreground = ${colors.accent}
+label-background = #333440
+label-padding = 3
+click-left = rofi -modi run,drun -show drun -location 1 -xoffset 15 -yoffset 39
 
 [module/cpu]
 type = internal/cpu
 interval = 2
-format-prefix = "  "
+format-prefix = "  "
 format-prefix-foreground = ${colors.accent}
 label = %percentage%
 
 [module/memory]
 type = internal/memory
 interval = 2
-format-prefix = "  "
+format-prefix = "  "
 format-prefix-foreground = ${colors.accent}
 label = %percentage_used%
 
 [module/openweathermap-forecast]
 type = custom/script
-format-prefix = " "
+format-prefix = " "
 format-prefix-foreground = ${colors.accent}
 label-foreground = ${colors.text}
 exec = ~/.config/polybar/scripts/openweathermap-forecast.sh
@@ -98,7 +96,7 @@ ws-icon-6 = VII;7
 ws-icon-7 = VIII;8
 ws-icon-8 = IX;9
 ws-icon-9 = X;10
-ws-icon-default = 
+ws-icon-default =
 format = <label-state> <label-mode>
 label-focused = %icon%
 label-focused-background = #333440
@@ -112,7 +110,7 @@ index-sort = true
 wrapping-scroll = false
 label-urgent-foreground = ${xrdb:color5}
 label-urgent-padding = 3
-label-empty = 
+label-empty =
 label-empty-foreground = ${colors.text}
 label-empty-padding = 3
 
@@ -123,11 +121,11 @@ interval = 10
 fixed-values = true
 spacing = 1
 format-mounted = <label-mounted>
-format-mounted-prefix = 
+format-mounted-prefix =
 format-mounted-padding = 1
 format-mounted-prefix-foreground = ${colors.accent}
 format-unmounted = <label-unmounted>
-format-unmounted-prefix = 
+format-unmounted-prefix =
 format-unmounted-padding = 1
 format-unmounted-prefix-foreground = ${colors.suffix}
 label-mounted = " %free%"
@@ -140,9 +138,9 @@ interval = 1
 date-alt = "%e %B %Y,"
 time = "%H:%M"
 time-alt = "%H:%M:%S"
-format-prefix = " "
+format-prefix = " "
 format-prefix-foreground = ${colors.accent}
-label =%{A3:gsimplecal & disown:}%date% %time%%{A} %{A}
+label = %date% %time%
 label-foreground = ${colors.text}
 format-padding = 0
 
@@ -150,30 +148,30 @@ format-padding = 0
 type = internal/xkeyboard
 blacklist-0 = num lock
 blacklist-1 = caps lock
-format-prefix = " "
+format-prefix = " "
 format-prefix-foreground = ${colors.accent}
 label = %layout%
 format-padding = 0
 
 [module/power]
 type = custom/text
-content = 
-content-foreground = ${colors.accent}
-content-background = #333440
-content-padding = 3
-click-left = sudo poweroff
+label =
+label-foreground = ${colors.accent}
+label-background = #333440
+label-padding = 3
+click-left = rofi -show power-menu -modi "power-menu:~/.config/polybar/scripts/power-menu.sh"
 
 [module/updates]
 type = custom/script
-exec = doas xbps-install -S > /dev/null 2>&1; ~/.config/polybar/scripts/xbps-updates
+exec = ~/.config/polybar/scripts/xbps-updates
 format = <label>
-format-prefix = 
+format-prefix =
 format-prefix-foreground = ${colors.accent}
 label = %output%
 label-padding = 1
 label-font = 1
 format-foreground = ${colors.text}
-interval = 60
+interval = 3600
 label-foreground = ${colors.accent}
 cursor-click = pointer
 click-left = "st -e sudo xbps-install -Su &"
