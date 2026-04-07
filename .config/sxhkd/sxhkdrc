@@ -3,8 +3,8 @@
 #
 
 # show help on key bindings
-super + F1
-  $HOME/.config/bspwm/bspwmfloat st -n Float -e ~/.config/bspwm/show_keys
+# super + F1
+#   $HOME/.config/bspwm/bspwmfloat st -n Float -e ~/.config/bspwm/show_keys
 
 # terminal emulator
 super + Return
