@@ -1,0 +1,140 @@
+# ╔══════════════════════════════════════════════════════════╗
+# ║  Void Linux BSPWM Dotfiles — .gitignore                ║
+# ╚══════════════════════════════════════════════════════════╝
+
+# ─── OS ───────────────────────────────────────────────────
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+.fseventsd
+.TemporaryItems
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Linux
+*~
+.directory
+.Trash-*
+lost+found/
+
+# Windows (на случай клонирования)
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ─── Editors / IDEs ──────────────────────────────────────
+# VS Code
+.vscode/
+*.code-workspace
+
+# JetBrains
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# Vim / Neovim
+*.swp
+*.swo
+*.swn
+*~
+tags
+Session.vim
+.netrwhist
+
+# Emacs
+\#*\#
+.#*
+*.elc
+*~
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# ─── C Build Artifacts (st terminal) ─────────────────────
+*.o
+*.so
+*.so.*
+*.a
+*.dylib
+*.out
+*.d
+
+# ─── Package Build ───────────────────────────────────────
+*.pkg.tar.xz
+*.pkg.tar.zst
+*.pkg.tar.gz
+*.deb
+*.rpm
+*.xbps
+pkg/
+src/
+
+# ─── Theme Build ─────────────────────────────────────────
+# SCSS compiled output
+theme/src/**/*.css
+theme/src/**/*.css.map
+!theme/src/_sass/**
+node_modules/
+.sass-cache/
+.cache/
+
+# ─── Polybar secrets ─────────────────────────────────────
+.config/polybar/secrets
+
+# ─── Secrets / Credentials ───────────────────────────────
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+id_rsa
+id_ed25519
+*.gpg
+credentials.json
+token.json
+
+# ─── AI / Tooling ────────────────────────────────────────
+.claude-flow/
+.claude/
+.cursor/
+.copilot/
+.aider*
+.codeium/
+
+# ─── Logs / Temp ─────────────────────────────────────────
+*.log
+*.tmp
+*.temp
+*.bak
+*.orig
+*.rej
+*.pid
+*.seed
+core
+core.*
+
+# ─── Archives (не трекать скачанные архивы) ───────────────
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+*.tar.zst
+*.zip
+*.rar
+*.7z
+
+# ─── Python (если скрипты) ───────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
