@@ -21,7 +21,7 @@ jobs:
       - name: Install tools
         run: |
           xbps-install -Syu -y
-          xbps-install -y ShellCheck git wget tar
+          xbps-install -y shellcheck git wget tar bash
 
       - name: ShellCheck — bash scripts
         run: |
@@ -137,14 +137,14 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /var/cache/xbps
-          key: xbps-validate-v1
+          key: xbps-validate-v2
           restore-keys: xbps-validate-
 
       - name: Install build dependencies
         run: |
           xbps-install -Syu -y
           xbps-install -y \
-            base-devel pkg-config \
+            base-devel pkg-config bash \
             libXft-devel libX11-devel harfbuzz-devel libXext-devel \
             libXrender-devel libXinerama-devel \
             fontconfig-devel freetype-devel \
@@ -165,6 +165,7 @@ jobs:
           echo "st build: OK"
 
       - name: Validate SCSS compilation
+        shell: bash
         run: |
           echo "::group::Compiling SCSS themes"
           cd theme
@@ -186,11 +187,12 @@ jobs:
           exit $FAILED
 
       - name: Validate polybar config — module references
+        shell: bash
         run: |
           CONFIG=".config/polybar/config"
           MODULES_USED=$(grep -E '^modules-(left|center|right)' "$CONFIG" \
             | sed 's/.*= //' | tr ' ' '\n' | sort -u | grep -v '^$')
-          MODULES_DEFINED=$(grep -oP '^\[module/\K[^\]]+' "$CONFIG" | sort -u)
+          MODULES_DEFINED=$(sed -n 's/^\[module\/\([^]]*\)\]/\1/p' "$CONFIG" | sort -u)
 
           FAILED=0
           for mod in $MODULES_USED; do
@@ -201,7 +203,7 @@ jobs:
           done
 
           # Also check that all fonts referenced exist sequentially (no gaps)
-          FONT_INDICES=$(grep -oP '^font-\K\d+' "$CONFIG" | sort -n)
+          FONT_INDICES=$(sed -n 's/^font-\([0-9]*\) .*/\1/p' "$CONFIG" | sort -n)
           EXPECTED=0
           for idx in $FONT_INDICES; do
             if [ "$idx" -ne "$EXPECTED" ]; then
@@ -272,14 +274,14 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /var/cache/xbps
-          key: xbps-install-v1-${{ hashFiles('install.sh') }}
-          restore-keys: xbps-install-v1-
+          key: xbps-install-v2-${{ hashFiles('install.sh') }}
+          restore-keys: xbps-install-v2-
 
       - name: Install all packages from install.sh
         run: |
           xbps-install -Syu -y
           xbps-install -y \
-            xorg base-devel git curl wget \
+            xorg base-devel git curl wget bash \
             libXft-devel libX11-devel harfbuzz-devel libXext-devel \
             libXrender-devel libXinerama-devel \
             bspwm sxhkd dunst flameshot htop neovim polybar python3 jq \
@@ -288,7 +290,7 @@ jobs:
             gtk-engine-murrine gtk2-engines font-iosevka \
             void-repo-multilib void-repo-multilib-nonfree void-repo-nonfree \
             xtools zsh nsxiv \
-            pipewire wireplumber pipewire-alsa pipewire-pulse pavucontrol \
+            pipewire wireplumber alsa-pipewire pavucontrol \
             xdg-user-dirs xdg-utils \
             sassc fontconfig
 
@@ -372,6 +374,7 @@ jobs:
           echo "st build + install: OK"
 
       - name: Install GTK theme
+        shell: bash
         run: |
           export HOME="/root"
           cd theme
@@ -398,6 +401,7 @@ jobs:
           fi
 
       - name: Install icon theme
+        shell: bash
         run: |
           export HOME="/root"
           cd icon-theme
@@ -460,9 +464,12 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install tools
-        run: xbps-install -Syu -y
+        run: |
+          xbps-install -Syu -y
+          xbps-install -y bash
 
       - name: Verify all packages exist in Void repos
+        shell: bash
         run: |
           FAILED=0
           # Extract packages from install.sh
@@ -490,14 +497,14 @@ jobs:
           FAILED=0
 
           # Wallpaper in .xinitrc
-          WALL=$(grep -oP '~/.config/[^\s&]+\.(jpg|png)' .xinitrc | sed 's|^~/||' || true)
+          WALL=$(grep 'hsetroot' .xinitrc | sed -n 's|.*~/\([^ &]*\).*|\1|p' || true)
           if [ -n "$WALL" ] && [ ! -f "$WALL" ]; then
             echo "::error file=.xinitrc::Referenced wallpaper not found: $WALL"
             FAILED=1
           fi
 
           # Polybar scripts
-          for ref in $(grep -oP '~/.config/polybar/scripts/[^\s;&]+' .config/polybar/config | sed 's|^~/||' || true); do
+          for ref in $(grep 'config/polybar/scripts/' .config/polybar/config | sed -n 's|.*~/\([^ ;&"]*\).*|\1|p' || true); do
             if [ ! -f "$ref" ]; then
               echo "::error file=.config/polybar/config::Referenced script not found: $ref"
               FAILED=1
@@ -505,7 +512,7 @@ jobs:
           done
 
           # Rofi theme reference
-          THEME_REF=$(grep '@theme' .config/rofi/config.rasi | grep -oP '"[^"]+"' | tr -d '"' || true)
+          THEME_REF=$(grep '@theme' .config/rofi/config.rasi | sed -n 's/.*"\([^"]*\)".*/\1/p' || true)
           if [ -n "$THEME_REF" ] && [ ! -f ".config/rofi/$THEME_REF" ]; then
             echo "::error file=.config/rofi/config.rasi::Referenced theme not found: .config/rofi/$THEME_REF"
             FAILED=1
@@ -550,7 +557,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install bash
+        run: |
+          xbps-install -Syu -y
+          xbps-install -y bash
+
       - name: Validate icon-theme symlinks
+        shell: bash
         run: |
           BROKEN=0
           TOTAL=0
@@ -575,6 +588,7 @@ jobs:
           [ "$BROKEN" -eq 0 ] || exit 1
 
       - name: Validate .icons symlinks
+        shell: bash
         run: |
           BROKEN=0
           while IFS= read -r link; do

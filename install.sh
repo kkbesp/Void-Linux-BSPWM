@@ -17,7 +17,7 @@ sudo xbps-install -Sy \
     gtk-engine-murrine gtk2-engines font-iosevka \
     void-repo-multilib void-repo-multilib-nonfree void-repo-nonfree \
     xtools zsh nsxiv \
-    pipewire wireplumber pipewire-alsa pipewire-pulse pavucontrol \
+    pipewire wireplumber alsa-pipewire pavucontrol \
     xdg-user-dirs xdg-utils
 
 echo "==> Enabling services..."
