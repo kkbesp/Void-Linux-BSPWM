@@ -4,7 +4,7 @@
 
 # show help on key bindings
 super + F1
-  $HOME/.config/bspwm/bspwmfloat urxvt -name Float -e ~/.config/bspwm/show_keys
+  $HOME/.config/bspwm/bspwmfloat st -n Float -e ~/.config/bspwm/show_keys
 
 # terminal emulator
 super + Return
@@ -28,7 +28,7 @@ alt + m
 
 # ranger
 alt + r
-  urxvt -name Ranger -e ranger
+  st -n Ranger -e ranger
 
 # alt + c
 #   rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}'
