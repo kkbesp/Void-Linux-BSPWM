@@ -1,0 +1,591 @@
+name: Dotfiles CI
+
+on:
+  push:
+    branches: ['*']
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ─────────────────────────────────────────────────────────
+  # Job 1: Static analysis — ShellCheck, secrets, permissions
+  # ─────────────────────────────────────────────────────────
+  lint:
+    name: Lint & Security
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/void-linux/void-glibc-full:latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install tools
+        run: |
+          xbps-install -Syu -y
+          xbps-install -y ShellCheck git wget tar
+
+      - name: ShellCheck — bash scripts
+        run: |
+          FAILED=0
+          for f in \
+            install.sh \
+            .config/polybar/launch.sh \
+            .config/polybar/scripts/xbps-updates \
+            theme/install.sh \
+            theme/parse-sass.sh \
+            icon-theme/install.sh \
+            icon-theme/src/cursors/build.sh; do
+            if [ -f "$f" ]; then
+              echo "::group::ShellCheck (bash) $f"
+              shellcheck -s bash -S warning -f gcc "$f" || FAILED=1
+              echo "::endgroup::"
+            fi
+          done
+          exit $FAILED
+
+      - name: ShellCheck — POSIX sh scripts
+        run: |
+          FAILED=0
+          for f in \
+            .config/polybar/scripts/openweathermap-forecast.sh \
+            .config/polybar/scripts/power-menu.sh \
+            .config/bspwm/bspwmrc \
+            .xinitrc \
+            terminal/st-copyout \
+            terminal/st-urlhandler; do
+            if [ -f "$f" ]; then
+              echo "::group::ShellCheck (sh) $f"
+              shellcheck -s sh -S warning -f gcc "$f" || FAILED=1
+              echo "::endgroup::"
+            fi
+          done
+          exit $FAILED
+
+      - name: Secrets scan (gitleaks)
+        run: |
+          ARCH=$(uname -m)
+          case "$ARCH" in
+            x86_64) ARCH="x64" ;;
+            aarch64) ARCH="arm64" ;;
+          esac
+          wget -qO gitleaks.tar.gz \
+            "https://github.com/gitleaks/gitleaks/releases/download/v8.21.2/gitleaks_8.21.2_linux_${ARCH}.tar.gz"
+          tar -xzf gitleaks.tar.gz gitleaks
+          chmod +x gitleaks
+
+          ./gitleaks detect --source=. --verbose --no-git --exit-code 1 || {
+            echo "::error::Gitleaks found potential secrets in the codebase!"
+            exit 1
+          }
+
+      - name: File permissions check
+        run: |
+          FAILED=0
+
+          # Scripts that MUST be executable
+          for f in \
+            install.sh \
+            .config/bspwm/bspwmrc \
+            .config/polybar/launch.sh \
+            .config/polybar/scripts/openweathermap-forecast.sh \
+            .config/polybar/scripts/power-menu.sh \
+            .config/polybar/scripts/xbps-updates \
+            theme/install.sh \
+            theme/parse-sass.sh \
+            icon-theme/install.sh; do
+            if [ -f "$f" ] && [ ! -x "$f" ]; then
+              echo "::error file=$f::Script must be executable: $f"
+              FAILED=1
+            fi
+          done
+
+          exit $FAILED
+
+      - name: Hardcoded user paths check
+        run: |
+          FAILED=0
+          HITS=$(grep -rn '/home/[a-z][a-z0-9_-]*/' \
+            --include='*.sh' --include='*.ini' --include='*.conf' \
+            --include='*.rasi' --include='sxhkdrc' --include='bspwmrc' \
+            --include='.zshrc' --include='.xinitrc' --include='.Xresources' \
+            --include='config' --include='dunstrc' --include='htoprc' \
+            --include='flameshot.ini' \
+            . 2>/dev/null \
+            | grep -v '.git/' \
+            | grep -v 'README' \
+            | grep -v 'secrets.example' \
+            || true)
+
+          if [ -n "$HITS" ]; then
+            echo "::error::Found hardcoded user-specific paths:"
+            echo "$HITS"
+            FAILED=1
+          fi
+          exit $FAILED
+
+  # ─────────────────────────────────────────────────────────
+  # Job 2: Config syntax validation + C build
+  # ─────────────────────────────────────────────────────────
+  validate:
+    name: Syntax & Build
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/void-linux/void-glibc-full:latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache xbps packages
+        uses: actions/cache@v4
+        with:
+          path: /var/cache/xbps
+          key: xbps-validate-v1
+          restore-keys: xbps-validate-
+
+      - name: Install build dependencies
+        run: |
+          xbps-install -Syu -y
+          xbps-install -y \
+            base-devel pkg-config \
+            libXft-devel libX11-devel harfbuzz-devel libXext-devel \
+            libXrender-devel libXinerama-devel \
+            fontconfig-devel freetype-devel \
+            sassc zsh python3
+
+      - name: Build st terminal
+        run: |
+          echo "::group::Building st terminal"
+          cd terminal
+          make clean
+          make
+          echo "::endgroup::"
+
+          if [ ! -f st ]; then
+            echo "::error file=terminal/Makefile::st binary was not produced"
+            exit 1
+          fi
+          echo "st build: OK"
+
+      - name: Validate SCSS compilation
+        run: |
+          echo "::group::Compiling SCSS themes"
+          cd theme
+          bash parse-sass.sh
+          echo "::endgroup::"
+
+          # Verify CSS outputs
+          FAILED=0
+          for variant_dir in src/gtk-3.0/theme*; do
+            if [ -d "$variant_dir" ]; then
+              for css in "$variant_dir"/gtk*.css; do
+                if [ -f "$css" ] && [ ! -s "$css" ]; then
+                  echo "::error file=theme/$css::SCSS produced empty CSS"
+                  FAILED=1
+                fi
+              done
+            fi
+          done
+          exit $FAILED
+
+      - name: Validate polybar config — module references
+        run: |
+          CONFIG=".config/polybar/config"
+          MODULES_USED=$(grep -E '^modules-(left|center|right)' "$CONFIG" \
+            | sed 's/.*= //' | tr ' ' '\n' | sort -u | grep -v '^$')
+          MODULES_DEFINED=$(grep -oP '^\[module/\K[^\]]+' "$CONFIG" | sort -u)
+
+          FAILED=0
+          for mod in $MODULES_USED; do
+            if ! echo "$MODULES_DEFINED" | grep -qx "$mod"; then
+              echo "::error file=$CONFIG::Module '$mod' used in bar but not defined. Defined: $(echo $MODULES_DEFINED | tr '\n' ', ')"
+              FAILED=1
+            fi
+          done
+
+          # Also check that all fonts referenced exist sequentially (no gaps)
+          FONT_INDICES=$(grep -oP '^font-\K\d+' "$CONFIG" | sort -n)
+          EXPECTED=0
+          for idx in $FONT_INDICES; do
+            if [ "$idx" -ne "$EXPECTED" ]; then
+              echo "::warning file=$CONFIG::Font index gap: expected font-$EXPECTED, found font-$idx"
+            fi
+            EXPECTED=$((idx + 1))
+          done
+
+          exit $FAILED
+
+      - name: Validate INI files
+        run: |
+          FAILED=0
+          for ini in .config/gtk-3.0/settings.ini .config/flameshot/flameshot.ini; do
+            python3 -c "
+          import configparser, sys
+          p = configparser.ConfigParser()
+          try:
+              p.read('$ini')
+              if not p.sections():
+                  print(f'::warning file=$ini::No sections found')
+          except Exception as e:
+              print(f'::error file=$ini::INI parse error: {e}')
+              sys.exit(1)
+          " || FAILED=1
+          done
+          exit $FAILED
+
+      - name: Validate shell configs syntax
+        run: |
+          FAILED=0
+
+          echo "::group::bspwmrc"
+          sh -n .config/bspwm/bspwmrc || {
+            echo "::error file=.config/bspwm/bspwmrc::Shell syntax error"
+            FAILED=1
+          }
+          echo "::endgroup::"
+
+          echo "::group::.zshrc"
+          zsh -n .zshrc || {
+            echo "::error file=.zshrc::Zsh syntax error"
+            FAILED=1
+          }
+          echo "::endgroup::"
+
+          echo "::group::.xinitrc"
+          sh -n .xinitrc || {
+            echo "::error file=.xinitrc::Shell syntax error"
+            FAILED=1
+          }
+          echo "::endgroup::"
+
+          exit $FAILED
+
+  # ─────────────────────────────────────────────────────────
+  # Job 3: Full install simulation in Void Linux
+  # ─────────────────────────────────────────────────────────
+  install-test:
+    name: Install Simulation
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/void-linux/void-glibc-full:latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache xbps packages
+        uses: actions/cache@v4
+        with:
+          path: /var/cache/xbps
+          key: xbps-install-v1-${{ hashFiles('install.sh') }}
+          restore-keys: xbps-install-v1-
+
+      - name: Install all packages from install.sh
+        run: |
+          xbps-install -Syu -y
+          xbps-install -y \
+            xorg base-devel git curl wget \
+            libXft-devel libX11-devel harfbuzz-devel libXext-devel \
+            libXrender-devel libXinerama-devel \
+            bspwm sxhkd dunst flameshot htop neovim polybar python3 jq \
+            font-weather-icons font-awesome6 noto-fonts-cjk noto-fonts-emoji \
+            picom numlockx hsetroot firefox chrony lxappearance rofi \
+            gtk-engine-murrine gtk2-engines font-iosevka \
+            void-repo-multilib void-repo-multilib-nonfree void-repo-nonfree \
+            xtools zsh nsxiv \
+            pipewire wireplumber pipewire-alsa pipewire-pulse pavucontrol \
+            xdg-user-dirs xdg-utils \
+            sassc fontconfig
+
+      - name: Simulate config installation
+        run: |
+          SCRIPT_DIR="$(pwd)"
+          export HOME="/root"
+          FAILED=0
+
+          echo "==> Copying configs..."
+          cp "$SCRIPT_DIR/.zshrc" "$HOME/"
+          cp "$SCRIPT_DIR/.xinitrc" "$HOME/"
+          cp "$SCRIPT_DIR/.Xresources" "$HOME/"
+          cp "$SCRIPT_DIR/.p10k.zsh" "$HOME/"
+          cp -r "$SCRIPT_DIR/.config/" "$HOME/"
+          cp -r "$SCRIPT_DIR/.icons/" "$HOME/"
+          cp -r "$SCRIPT_DIR/.fonts/" "$HOME/"
+
+          echo "==> Verifying config files..."
+          for f in \
+            "$HOME/.zshrc" \
+            "$HOME/.xinitrc" \
+            "$HOME/.Xresources" \
+            "$HOME/.p10k.zsh" \
+            "$HOME/.config/bspwm/bspwmrc" \
+            "$HOME/.config/sxhkd/sxhkdrc" \
+            "$HOME/.config/polybar/config" \
+            "$HOME/.config/polybar/launch.sh" \
+            "$HOME/.config/polybar/scripts/openweathermap-forecast.sh" \
+            "$HOME/.config/polybar/scripts/power-menu.sh" \
+            "$HOME/.config/polybar/scripts/xbps-updates" \
+            "$HOME/.config/polybar/secrets.example" \
+            "$HOME/.config/dunst/dunstrc" \
+            "$HOME/.config/picom/picom.conf" \
+            "$HOME/.config/rofi/config.rasi" \
+            "$HOME/.config/rofi/default.rasi" \
+            "$HOME/.config/gtk-3.0/settings.ini" \
+            "$HOME/.config/flameshot/flameshot.ini" \
+            "$HOME/.config/htop/htoprc"; do
+            if [ ! -f "$f" ]; then
+              echo "::error::Missing after install: $f"
+              FAILED=1
+            fi
+          done
+
+          echo "==> Checking wallpaper..."
+          if [ ! -f "$HOME/.config/.wall/macos-big-sur-2560x1440-23119.jpg" ]; then
+            echo "::error file=.xinitrc::Wallpaper referenced in .xinitrc is missing"
+            FAILED=1
+          fi
+
+          echo "==> Checking fonts..."
+          for f in \
+            "$HOME/.fonts/ClearSans-Bold.ttf" \
+            "$HOME/.fonts/ClearSans.ttf"; do
+            if [ ! -f "$f" ]; then
+              echo "::error::Font missing after install: $f"
+              FAILED=1
+            fi
+          done
+
+          exit $FAILED
+
+      - name: Build and install st terminal
+        run: |
+          cd terminal
+          make clean
+          make
+
+          if [ ! -f st ]; then
+            echo "::error::st binary not produced"
+            exit 1
+          fi
+
+          # Test install to temp prefix
+          make install PREFIX=/usr/local DESTDIR=/tmp/st-test
+          if [ ! -f /tmp/st-test/usr/local/bin/st ]; then
+            echo "::error::st install to DESTDIR failed"
+            exit 1
+          fi
+          echo "st build + install: OK"
+
+      - name: Install GTK theme
+        run: |
+          export HOME="/root"
+          cd theme
+          bash install.sh -c dark 2>&1
+
+          # Verify theme directory exists
+          THEME_FOUND=0
+          for dir in "$HOME/.themes/"*qogir* "$HOME/.themes/"*Qogir*; do
+            if [ -d "$dir" ]; then
+              THEME_FOUND=1
+              echo "Theme installed: $dir"
+              # Verify key files
+              for f in index.theme; do
+                if [ ! -f "$dir/$f" ]; then
+                  echo "::error::Missing theme file: $dir/$f"
+                  exit 1
+                fi
+              done
+            fi
+          done
+
+          if [ "$THEME_FOUND" -eq 0 ]; then
+            echo "::warning::Theme directory not found (may use different naming)"
+          fi
+
+      - name: Install icon theme
+        run: |
+          export HOME="/root"
+          cd icon-theme
+          bash install.sh 2>&1
+
+          ICON_DIR="$HOME/.local/share/icons/Qogir"
+          if [ ! -d "$ICON_DIR" ]; then
+            # Try alternate location
+            ICON_DIR="$HOME/.icons/Qogir"
+          fi
+
+          if [ -d "$ICON_DIR" ]; then
+            echo "Icon theme installed: $ICON_DIR"
+            for d in scalable symbolic; do
+              if [ ! -d "$ICON_DIR/$d" ] && [ ! -L "$ICON_DIR/$d" ]; then
+                echo "::error::Missing icon directory: $ICON_DIR/$d"
+                exit 1
+              fi
+            done
+          else
+            echo "::warning::Icon theme directory not found at expected paths"
+          fi
+
+      - name: Verify polybar scripts executable
+        run: |
+          export HOME="/root"
+          FAILED=0
+          for script in \
+            "$HOME/.config/polybar/launch.sh" \
+            "$HOME/.config/polybar/scripts/openweathermap-forecast.sh" \
+            "$HOME/.config/polybar/scripts/power-menu.sh" \
+            "$HOME/.config/polybar/scripts/xbps-updates"; do
+            if [ ! -x "$script" ]; then
+              echo "::error::Not executable after install: $script"
+              FAILED=1
+            fi
+          done
+          exit $FAILED
+
+      - name: Verify zinit clone
+        run: |
+          export HOME="/root"
+          ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+          git clone --depth 1 https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+          if [ ! -f "$ZINIT_HOME/zinit.zsh" ]; then
+            echo "::error::zinit clone failed"
+            exit 1
+          fi
+          echo "zinit clone: OK"
+
+  # ─────────────────────────────────────────────────────────
+  # Job 4: Quality checks
+  # ─────────────────────────────────────────────────────────
+  quality:
+    name: Quality
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/void-linux/void-glibc-full:latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install tools
+        run: xbps-install -Syu -y
+
+      - name: Verify all packages exist in Void repos
+        run: |
+          FAILED=0
+          # Extract packages from install.sh
+          PACKAGES=$(sed -n '/xbps-install -Sy \\/,/^$/p' install.sh \
+            | grep -v 'xbps-install' \
+            | tr '\\' ' ' \
+            | tr -s ' \n' '\n' \
+            | sed 's/^[[:space:]]*//' \
+            | grep -v '^$' \
+            | sort -u)
+
+          echo "Checking $(echo "$PACKAGES" | wc -l) packages..."
+          for pkg in $PACKAGES; do
+            if ! xbps-query -R "$pkg" > /dev/null 2>&1; then
+              echo "::error file=install.sh::Package not found in Void repos: $pkg"
+              FAILED=1
+            else
+              echo "  $pkg: OK"
+            fi
+          done
+          exit $FAILED
+
+      - name: Cross-check file references
+        run: |
+          FAILED=0
+
+          # Wallpaper in .xinitrc
+          WALL=$(grep -oP '~/.config/[^\s&]+\.(jpg|png)' .xinitrc | sed 's|^~/||' || true)
+          if [ -n "$WALL" ] && [ ! -f "$WALL" ]; then
+            echo "::error file=.xinitrc::Referenced wallpaper not found: $WALL"
+            FAILED=1
+          fi
+
+          # Polybar scripts
+          for ref in $(grep -oP '~/.config/polybar/scripts/[^\s;&]+' .config/polybar/config | sed 's|^~/||' || true); do
+            if [ ! -f "$ref" ]; then
+              echo "::error file=.config/polybar/config::Referenced script not found: $ref"
+              FAILED=1
+            fi
+          done
+
+          # Rofi theme reference
+          THEME_REF=$(grep '@theme' .config/rofi/config.rasi | grep -oP '"[^"]+"' | tr -d '"' || true)
+          if [ -n "$THEME_REF" ] && [ ! -f ".config/rofi/$THEME_REF" ]; then
+            echo "::error file=.config/rofi/config.rasi::Referenced theme not found: .config/rofi/$THEME_REF"
+            FAILED=1
+          fi
+
+          # Polybar launch.sh reference in .xinitrc
+          if grep -q 'polybar/launch.sh' .xinitrc && [ ! -f ".config/polybar/launch.sh" ]; then
+            echo "::error file=.xinitrc::polybar/launch.sh referenced but missing"
+            FAILED=1
+          fi
+
+          exit $FAILED
+
+      - name: TODO/FIXME audit
+        run: |
+          HITS=$(grep -rn 'TODO\|FIXME\|HACK\|XXX' \
+            --include='*.sh' --include='*.conf' --include='*.ini' \
+            --include='*.rasi' \
+            . 2>/dev/null \
+            | grep -v '.git/' \
+            | grep -v 'terminal/' \
+            | grep -v '.p10k.zsh' \
+            | grep -v 'theme/src/' \
+            | grep -v 'icon-theme/src/' \
+            || true)
+
+          if [ -n "$HITS" ]; then
+            echo "::warning::Found TODO/FIXME/HACK in project files:"
+            echo "$HITS"
+          fi
+          # Non-blocking
+          exit 0
+
+  # ─────────────────────────────────────────────────────────
+  # Job 5: Symlink integrity (13,000+ icon symlinks)
+  # ─────────────────────────────────────────────────────────
+  symlinks:
+    name: Symlink Integrity
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/void-linux/void-glibc-full:latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate icon-theme symlinks
+        run: |
+          BROKEN=0
+          TOTAL=0
+
+          while IFS= read -r link; do
+            TOTAL=$((TOTAL + 1))
+            TARGET=$(readlink "$link")
+            DIR=$(dirname "$link")
+
+            if [ ! -e "$DIR/$TARGET" ]; then
+              echo "::error file=$link::Broken symlink -> $TARGET"
+              BROKEN=$((BROKEN + 1))
+              # Limit output to first 50 to avoid flooding
+              if [ "$BROKEN" -ge 50 ]; then
+                echo "::error::Too many broken symlinks, stopping at 50"
+                break
+              fi
+            fi
+          done < <(find icon-theme/links -type l 2>/dev/null)
+
+          echo "Checked $TOTAL symlinks, $BROKEN broken"
+          [ "$BROKEN" -eq 0 ] || exit 1
+
+      - name: Validate .icons symlinks
+        run: |
+          BROKEN=0
+          while IFS= read -r link; do
+            TARGET=$(readlink "$link")
+            DIR=$(dirname "$link")
+            if [ ! -e "$DIR/$TARGET" ] && [ ! -e "$TARGET" ]; then
+              echo "::warning file=$link::Broken cursor symlink -> $TARGET"
+              BROKEN=$((BROKEN + 1))
+            fi
+          done < <(find .icons -type l 2>/dev/null)
+
+          echo "Cursor symlinks broken: $BROKEN"
+          # Non-blocking for cursor symlinks (may reference installed files)
+          exit 0
